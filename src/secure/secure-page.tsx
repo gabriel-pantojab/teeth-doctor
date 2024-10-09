@@ -1,5 +1,5 @@
+import { Outlet } from "react-router-dom";
 import { Navbar } from "./components/navbar";
-import { LessonPage } from "./lessons/lesson-page";
 
 export function SecurePage() {
   return (
@@ -11,7 +11,7 @@ export function SecurePage() {
       </header>
 
       <main className="overflow-auto">
-        <LessonPage />
+        <Outlet />
       </main>
 
       <Navbar />
