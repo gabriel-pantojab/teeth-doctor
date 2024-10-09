@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export function Navbar() {
   return (
-    <nav className="p-2 border-t-2 border-gray-300 rounded-md">
+    <nav className="p-2 rounded-t-md bg-white shadow-md">
       <ul className="w-full flex justify-center gap-3">
         <li>
           <Link to="/lessons">Leccion</Link>
