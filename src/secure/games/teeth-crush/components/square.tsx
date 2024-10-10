@@ -6,7 +6,14 @@ import {
   oppositeDirection,
 } from "../utils/utils";
 import { Point } from "../models/point";
-import { isValidMove, moveSquare, Position } from "../utils/game";
+import {
+  canCrush,
+  crush,
+  fallDownSquares,
+  isValidMove,
+  moveSquare,
+  Position,
+} from "../utils/game";
 import { TeethCrushContext } from "../state/teeth-crush-context";
 import { HEIGHT, WIDTH } from "../models/constants";
 
@@ -23,7 +30,7 @@ export function Square({
   position,
   className,
   addAnimateToSquare,
-  removeAnimateFromSquare
+  removeAnimateFromSquare,
 }: SquareProps) {
   const { grid, updateGrid } = useContext(TeethCrushContext);
   const [startPoint, setStartPoint] = useState<Point>({ x: 0, y: 0 });
@@ -73,6 +80,19 @@ export function Square({
         if (removeAnimateFromSquare) removeAnimateFromSquare(to);
         const updatedGrid = moveSquare(from, to, grid);
         updateGrid(updatedGrid);
+
+        if (canCrush(to, updatedGrid)) {
+          updateGrid(crush(to, updatedGrid));
+          let repeatCount = 0;
+          const intervalID = setInterval(() => {
+            if (repeatCount === 5) {
+              clearInterval(intervalID);
+              return;
+            }
+            updateGrid(fallDownSquares(updatedGrid));
+            repeatCount++;
+          }, 200);
+        }
       }, 500);
     }
   };

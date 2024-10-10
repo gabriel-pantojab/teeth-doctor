@@ -1,4 +1,5 @@
 import { Point } from "../models/point";
+import { GridType } from "../state/teeth-crush-context";
 
 export enum Direction {
   Up = "up",
@@ -42,4 +43,13 @@ export function oppositeDirection(direction: Direction): Direction {
     default:
       return Direction.Invalid;
   }
+}
+
+export function generateGrid(n: number, m: number): GridType[][] {
+  return Array.from({ length: n }, () =>
+    Array.from({ length: m }, () => ({
+      value: Math.floor(Math.random() * n * m) + 1,
+      className: "",
+    }))
+  );
 }

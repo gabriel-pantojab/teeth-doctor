@@ -29,20 +29,24 @@ export function Grid() {
       }}
     >
       {grid.map((row, rowIndex) =>
-        row.map((_, columnIndex) => (
-          <Square
-            key={`${rowIndex}-${columnIndex}`}
-            position={{
-              row: rowIndex,
-              column: columnIndex,
-            }}
-            className={grid[rowIndex][columnIndex].className}
-            addAnimateToSquare={addAnimateToSquare}
-            removeAnimateFromSquare={removeAnimateFromSquare}
-          >
-            {grid[rowIndex][columnIndex].value}
-          </Square>
-        ))
+        row.map((_, columnIndex) =>
+          grid[rowIndex][columnIndex].value ? (
+            <Square
+              key={`${rowIndex}-${columnIndex}`}
+              position={{
+                row: rowIndex,
+                column: columnIndex,
+              }}
+              className={grid[rowIndex][columnIndex].className}
+              addAnimateToSquare={addAnimateToSquare}
+              removeAnimateFromSquare={removeAnimateFromSquare}
+            >
+              {grid[rowIndex][columnIndex].value}
+            </Square>
+          ) : (
+            <div></div>
+          )
+        )
       )}
     </div>
   );
