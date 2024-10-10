@@ -11,4 +11,7 @@ export default defineConfig({
       "@secure": path.resolve(__dirname, "./src/secure"),
     },
   },
+  server: {
+    host: "192.168.0.4",
+  },
 });

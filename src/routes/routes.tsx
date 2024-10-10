@@ -3,6 +3,8 @@ import { LoginPage } from "../public/login/login-page";
 import { SecurePage } from "@secure/secure-page";
 import { LessonPage } from "@secure/lessons/lesson-page";
 import { GamePage } from "@secure/games/game-page";
+import { GameList } from "@/secure/games/components/game-list";
+import { TeethCrush } from "@/secure/games/teeth-crush/teeth-crush";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +26,16 @@ export const router = createBrowserRouter([
       {
         path: "/games",
         element: <GamePage />,
+        children: [
+          {
+            path: "/games/",
+            element: <GameList />,
+          },
+          {
+            path: "/games/teeth-crush",
+            element: <TeethCrush />,
+          },
+        ],
       },
     ],
   },
