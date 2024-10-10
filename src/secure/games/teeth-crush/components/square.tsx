@@ -1,19 +1,6 @@
 import { TouchEvent, useContext, useState } from "react";
-import {
-  determineDirection,
-  Direction,
-  DirectionVector,
-  oppositeDirection,
-} from "../utils/utils";
 import { Point } from "../models/point";
-import {
-  canCrush,
-  crush,
-  fallDownSquares,
-  isValidMove,
-  moveSquare,
-  Position,
-} from "../utils/game";
+import { Position } from "../utils/game";
 import { TeethCrushContext } from "../state/teeth-crush-context";
 import { HEIGHT, WIDTH } from "../models/constants";
 
@@ -21,21 +8,12 @@ interface SquareProps {
   children: React.ReactNode;
   position: Position;
   className?: string;
-  addAnimateToSquare?: (position: Position, className: string) => void;
-  removeAnimateFromSquare?: (position: Position) => void;
 }
 
-export function Square({
-  children,
-  position,
-  className,
-  addAnimateToSquare,
-  removeAnimateFromSquare,
-}: SquareProps) {
-  const { grid, updateGrid } = useContext(TeethCrushContext);
+export function Square({ children, position, className }: SquareProps) {
+  const { moveSquareAction } = useContext(TeethCrushContext);
   const [startPoint, setStartPoint] = useState<Point>({ x: 0, y: 0 });
   const [isMoving, setIsMoving] = useState(false);
-  const [animateClass, setAnimateClass] = useState<string>("");
 
   const handleTouchStart = (e: TouchEvent) => {
     e.preventDefault();
@@ -52,49 +30,9 @@ export function Square({
     if (!isMoving) return;
 
     const touch = e.touches[0];
-    const { clientX, clientY } = touch;
+    const { clientX: x, clientY: y } = touch;
 
-    const direction: Direction = determineDirection(startPoint, {
-      x: clientX,
-      y: clientY,
-    });
-
-    const moveVector = DirectionVector[direction];
-    const from = {
-      row: position.row,
-      column: position.column,
-    };
-    const to = {
-      row: position.row + moveVector.y,
-      column: position.column + moveVector.x,
-    };
-
-    if (isValidMove(to, grid)) {
-      setIsMoving(false);
-      setAnimateClass(`${direction}-movement`);
-      if (addAnimateToSquare)
-        addAnimateToSquare(to, oppositeDirection(direction));
-
-      setTimeout(() => {
-        setAnimateClass("");
-        if (removeAnimateFromSquare) removeAnimateFromSquare(to);
-        const updatedGrid = moveSquare(from, to, grid);
-        updateGrid(updatedGrid);
-
-        if (canCrush(to, updatedGrid)) {
-          updateGrid(crush(to, updatedGrid));
-          let repeatCount = 0;
-          const intervalID = setInterval(() => {
-            if (repeatCount === 5) {
-              clearInterval(intervalID);
-              return;
-            }
-            updateGrid(fallDownSquares(updatedGrid));
-            repeatCount++;
-          }, 200);
-        }
-      }, 500);
-    }
+    moveSquareAction({ x, y }, { x: startPoint.x, y: startPoint.y }, position);
   };
 
   return (
@@ -102,7 +40,7 @@ export function Square({
       draggable
       onTouchMove={handleTouchMove}
       onTouchStart={handleTouchStart}
-      className={`border border-gray-500 rounded-md ${animateClass} ${className}`}
+      className={`border border-gray-500 rounded-md ${className}`}
       style={{
         width: `${WIDTH}px`,
         height: `${HEIGHT}px`,
