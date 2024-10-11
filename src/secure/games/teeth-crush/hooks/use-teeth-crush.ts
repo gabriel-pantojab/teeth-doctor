@@ -1,9 +1,10 @@
 import { GridType } from "../state/teeth-crush-context";
 import { Point } from "../models/point";
 import {
-  canCrush,
-  crush,
+  canCrushAll,
+  crushAll,
   fallDownSquares,
+  fillEmptySquares,
   isValidMove,
   moveSquare,
   Position,
@@ -17,7 +18,7 @@ import {
 
 interface Props {
   grid: GridType[][];
-  updateGrid: (grid: GridType[][]) => void;
+  updateGrid: React.Dispatch<React.SetStateAction<GridType[][]>>;
 }
 
 export function useTeethCrush({ grid, updateGrid }: Props) {
@@ -49,25 +50,33 @@ export function useTeethCrush({ grid, updateGrid }: Props) {
         direction
       )}-movement`;
 
-      updateGrid(cloneGrid);
+      updateGrid(cloneGrid); // hemos movido el cuadrado solo visualmente
 
       setTimeout(() => {
+        const cloneGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
         cloneGrid[from.row][from.column].className = "";
         cloneGrid[to.row][to.column].className = "";
         const updatedGrid = moveSquare(from, to, cloneGrid);
         updateGrid(updatedGrid);
 
-        if (canCrush(to, updatedGrid)) {
-          updateGrid(crush(to, updatedGrid));
-          let repeatCount = 0;
-          const intervalID = setInterval(() => {
-            if (repeatCount === 5) {
-              clearInterval(intervalID);
-              return;
-            }
-            updateGrid(fallDownSquares(updatedGrid));
-            repeatCount++;
-          }, 200);
+        if (canCrushAll(updatedGrid)) {
+          const temp = crushAll(updatedGrid);
+          updateGrid(temp);
+          setTimeout(() => {
+            updateGrid((prev) => {
+              const temp = fallDownSquares(prev);
+              return temp;
+            });
+          }, 500);
+          setTimeout(() => {
+            updateGrid((prev) => {
+              const temp = fillEmptySquares(prev);
+              return temp;
+            });
+          }, 1000);
+        } else {
+          const temp = moveSquare(to, from, updatedGrid);
+          updateGrid(temp);
         }
       }, 500);
     }

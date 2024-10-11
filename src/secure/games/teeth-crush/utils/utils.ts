@@ -1,5 +1,7 @@
+import { COUNT_IMAGES } from "../models/constants";
 import { Point } from "../models/point";
 import { GridType } from "../state/teeth-crush-context";
+import { canCrushAll } from "./game";
 
 export enum Direction {
   Up = "up",
@@ -46,10 +48,15 @@ export function oppositeDirection(direction: Direction): Direction {
 }
 
 export function generateGrid(n: number, m: number): GridType[][] {
-  return Array.from({ length: n }, () =>
-    Array.from({ length: m }, () => ({
-      value: Math.floor(Math.random() * n * m) + 1,
-      className: "",
-    }))
-  );
+  let grid;
+  do {
+    grid = Array.from({ length: n }, () =>
+      Array.from({ length: m }, () => ({
+        value: Math.floor(Math.random() * COUNT_IMAGES) + 1,
+        className: "",
+      }))
+    );
+  } while (canCrushAll(grid));
+
+  return grid;
 }

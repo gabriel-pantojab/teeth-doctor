@@ -9,7 +9,8 @@ export interface GridType {
 
 export interface TeethCrushContextType {
   grid: GridType[][];
-  updateGrid: (grid: GridType[][]) => void;
+  // tipo de setState
+  updateGrid: React.Dispatch<React.SetStateAction<GridType[][]>>;
   moveSquareAction: (
     point: Point,
     startPoint: Point,

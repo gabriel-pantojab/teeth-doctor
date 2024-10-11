@@ -25,9 +25,8 @@ export function Grid() {
                 column: columnIndex,
               }}
               className={grid[rowIndex][columnIndex].className}
-            >
-              {grid[rowIndex][columnIndex].value}
-            </Square>
+              value={grid[rowIndex][columnIndex].value}
+            />
           ) : (
             <div></div>
           )

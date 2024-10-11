@@ -2,15 +2,15 @@ import { TouchEvent, useContext, useState } from "react";
 import { Point } from "../models/point";
 import { Position } from "../utils/game";
 import { TeethCrushContext } from "../state/teeth-crush-context";
-import { HEIGHT, WIDTH } from "../models/constants";
+import { HEIGHT, images, WIDTH } from "../models/constants";
 
 interface SquareProps {
-  children: React.ReactNode;
+  value: number;
   position: Position;
   className?: string;
 }
 
-export function Square({ children, position, className }: SquareProps) {
+export function Square({ position, className, value }: SquareProps) {
   const { moveSquareAction } = useContext(TeethCrushContext);
   const [startPoint, setStartPoint] = useState<Point>({ x: 0, y: 0 });
   const [isMoving, setIsMoving] = useState(false);
@@ -40,13 +40,17 @@ export function Square({ children, position, className }: SquareProps) {
       draggable
       onTouchMove={handleTouchMove}
       onTouchStart={handleTouchStart}
-      className={`border border-gray-500 rounded-md ${className}`}
+      className={`border border-gray-500 rounded-md ${className} bg-white`}
       style={{
         width: `${WIDTH}px`,
         height: `${HEIGHT}px`,
       }}
     >
-      {children}
+      <img
+        className="w-full h-full object-cover"
+        src={images[value - 1]}
+        alt="hola"
+      />
     </div>
   );
 }

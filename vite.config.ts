@@ -12,6 +12,6 @@ export default defineConfig({
     },
   },
   server: {
-    host: "192.168.0.4",
+    host: "localhost",
   },
 });

@@ -3,9 +3,12 @@ import { Grid } from "./components/grid";
 import { GridType, TeethCrushContext } from "./state/teeth-crush-context";
 import { generateGrid } from "./utils/utils";
 import { useTeethCrush } from "./hooks/use-teeth-crush";
+import { GRID_COLUMNS, GRID_ROWS } from "./models/constants";
 
 export function TeethCrush() {
-  const [grid, setGrid] = useState<GridType[][]>(generateGrid(5, 5));
+  const [grid, setGrid] = useState<GridType[][]>(
+    generateGrid(GRID_ROWS, GRID_COLUMNS)
+  );
   const { moveSquareAction } = useTeethCrush({ grid, updateGrid: setGrid });
 
   return (

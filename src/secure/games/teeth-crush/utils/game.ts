@@ -1,11 +1,10 @@
+import { COUNT_IMAGES, COUNT_TO_CRUSH } from "../models/constants";
 import { GridType } from "../state/teeth-crush-context";
 
 export interface Position {
   row: number;
   column: number;
 }
-
-const COUNT_TO_CRUSH = 3;
 
 export function isValidMove(position: Position, grid: GridType[][]): boolean {
   const { column, row } = position;
@@ -73,6 +72,18 @@ export function canCrush(position: Position, grid: GridType[][]) {
   return canCrushHorizontal || canCrushVertical;
 }
 
+export function canCrushAll(grid: GridType[][]) {
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[0].length; j++) {
+      if (canCrush({ row: i, column: j }, grid)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 function horizontalCrush(
   r: number,
   c: number,
@@ -135,10 +146,14 @@ export function crush(position: Position, grid: GridType[][]): GridType[][] {
   //todo: primero verificar L / T
   let updatedGrid;
   const canCrushHorizontal =
-    countMatch(position, 0, 1, grid) + countMatch(position, 0, -1, grid) - 1 >=
+    countMatch(position, 0, 1, cloneGrid) +
+      countMatch(position, 0, -1, cloneGrid) -
+      1 >=
     COUNT_TO_CRUSH;
   const canCrushVertical =
-    countMatch(position, 1, 0, grid) + countMatch(position, -1, 0, grid) - 1 >=
+    countMatch(position, 1, 0, cloneGrid) +
+      countMatch(position, -1, 0, cloneGrid) -
+      1 >=
     COUNT_TO_CRUSH;
 
   if (canCrushHorizontal) {
@@ -150,16 +165,48 @@ export function crush(position: Position, grid: GridType[][]): GridType[][] {
   return updatedGrid || cloneGrid;
 }
 
-export function fallDownSquares(grid: GridType[][]) {
-  const updatedGrid = grid.map((row) => row.slice());
+export function crushAll(grid: GridType[][]): GridType[][] {
+  let updatedGrid = grid.map((row) => row.slice());
 
-  for (let i = grid.length - 1; i >= 0; i--) {
-    for (let j = 0; j < grid[0].length; j++) {
+  for (let i = 0; i < updatedGrid.length; i++) {
+    for (let j = 0; j < updatedGrid[0].length; j++) {
+      if (canCrush({ row: i, column: j }, updatedGrid)) {
+        updatedGrid = crush({ row: i, column: j }, updatedGrid);
+      }
+    }
+  }
+
+  return updatedGrid;
+}
+
+export function fallDownSquares(grid: GridType[][]) {
+  const updatedGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
+  for (let i = updatedGrid.length - 1; i >= 0; i--) {
+    for (let j = 0; j < updatedGrid[0].length; j++) {
       if (updatedGrid[i][j].value !== 0) {
-        if (i + 1 < grid.length && updatedGrid[i + 1][j].value === 0) {
-          updatedGrid[i + 1][j].value = updatedGrid[i][j].value;
+        let k = i + 1;
+        while (k < updatedGrid.length && updatedGrid[k][j].value === 0) {
+          k++;
+        }
+
+        if (k !== i + 1) {
+          updatedGrid[k - 1][j].value = updatedGrid[i][j].value;
           updatedGrid[i][j].value = 0;
         }
+      }
+    }
+  }
+
+  return updatedGrid;
+}
+
+export function fillEmptySquares(grid: GridType[][]) {
+  const updatedGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
+
+  for (let i = 0; i < updatedGrid.length; i++) {
+    for (let j = 0; j < updatedGrid[0].length; j++) {
+      if (updatedGrid[i][j].value === 0) {
+        updatedGrid[i][j].value = Math.floor(Math.random() * COUNT_IMAGES) + 1;
       }
     }
   }
