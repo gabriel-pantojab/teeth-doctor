@@ -15,6 +15,7 @@ export default function Question({ question, answers }: QuestionProps) {
   const [randomColors, setRandomColors] = useState<string[]>(
     getRandomColors(answers.length)
   );
+  const [timOutID, setTimeoutID] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setStartTime(true);
@@ -25,6 +26,8 @@ export default function Question({ question, answers }: QuestionProps) {
       setTimeLimit(true);
     }, SECONDS_TO_ANSWER * 1000);
 
+    setTimeoutID(ID);
+
     return () => clearTimeout(ID);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question]);
@@ -34,6 +37,7 @@ export default function Question({ question, answers }: QuestionProps) {
   }, [answers]);
 
   const handleClick = (index: number) => {
+    if (timOutID) clearTimeout(timOutID);
     setStartTime(false);
     setTimeLimit(false);
     handleAnswer(index);

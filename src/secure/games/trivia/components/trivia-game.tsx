@@ -1,12 +1,25 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 import { TriviaContext } from "../state/trivia-context";
 import Question from "./question";
-import { Link } from "react-router-dom";
+
 import { SECONDS_TO_ANSWER } from "../models/constants";
+
+const triviaMusic = new Audio("/src/assets/music/trivia.mp3");
 
 export default function TriviaGame() {
   const { questions, currentQuestionIndex, correctQuestions, startTime } =
     useContext(TriviaContext);
+
+  useEffect(() => {
+    triviaMusic.play();
+    triviaMusic.loop = true;
+    return () => {
+      triviaMusic.pause();
+      triviaMusic.currentTime = 0;
+    };
+  }, []);
 
   return (
     <section className="flex flex-col gap-2 w-full">
