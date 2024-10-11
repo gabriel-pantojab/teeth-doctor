@@ -5,6 +5,7 @@ import { LessonPage } from "@secure/lessons/lesson-page";
 import { GamePage } from "@secure/games/game-page";
 import { GameList } from "@/secure/games/components/game-list";
 import { TeethCrush } from "@/secure/games/teeth-crush/teeth-crush";
+import Trivia from "@/secure/games/trivia/trivia";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
           {
             path: "/games/teeth-crush",
             element: <TeethCrush />,
+          },
+          {
+            path: "/games/trivia",
+            element: <Trivia />,
           },
         ],
       },

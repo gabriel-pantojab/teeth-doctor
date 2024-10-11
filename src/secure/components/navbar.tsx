@@ -5,7 +5,7 @@ export function Navbar() {
     <nav className="p-2 rounded-t-md bg-white shadow-md">
       <ul className="w-full flex justify-center gap-3">
         <li>
-          <Link to="/lessons">Leccion</Link>
+          <Link to="/lessons">Lección</Link>
         </li>
 
         <li>

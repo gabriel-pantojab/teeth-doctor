@@ -10,9 +10,9 @@ export function GameCard({ title, banner }: GameCardProps) {
     <article>
       <Link
         to={`/games/${title.toLowerCase().replace(" ", "-")}`}
-        className="bg-white flex flex-col gap-2 rounded-md p-4 shadow-md text-black w-[300px]"
+        className="bg-white flex flex-col gap-2 rounded-md p-4 shadow-md text-black w-[280px]"
       >
-        <figure className="rounded-md w-full h-[300px] overflow-hidden">
+        <figure className="rounded-md w-full h-[280px] overflow-hidden">
           <img
             className="w-full h-full object-contain"
             src={banner}
