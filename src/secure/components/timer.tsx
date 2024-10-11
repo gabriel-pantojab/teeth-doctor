@@ -12,6 +12,7 @@ export default function Timer({
   duration,
   decresing = false,
   paused = false,
+  endTime,
 }: TimerProps) {
   const [time, setTime] = useState<number>(decresing ? duration : 0);
 
@@ -24,6 +25,11 @@ export default function Timer({
       setTime((prevTime) => {
         const isFished = decresing ? prevTime === 0 : prevTime === duration;
         if (isFished) {
+          if (endTime) {
+            setTimeout(() => {
+              endTime();
+            }, 0);
+          }
           clearInterval(interval);
           return prevTime;
         }
@@ -32,7 +38,7 @@ export default function Timer({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [duration, decresing, paused]);
+  }, [duration, decresing, paused, endTime]);
 
   useEffect(() => {}, [time]);
 
