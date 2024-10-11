@@ -1,7 +1,7 @@
 import { GridType } from "../state/teeth-crush-context";
 
-export const WIDTH = 70;
-export const HEIGHT = 70;
+export const WIDTH = 60;
+export const HEIGHT = 60;
 export const GRID_ROWS = 5;
 export const GRID_COLUMNS = 5;
 export const COUNT_TO_CRUSH = 3;

@@ -4,6 +4,7 @@ import { GridType, TeethCrushContext } from "./state/teeth-crush-context";
 import { generateGrid } from "./utils/utils";
 import { useTeethCrush } from "./hooks/use-teeth-crush";
 import { GRID_COLUMNS, GRID_ROWS } from "./models/constants";
+import Header from "./components/header";
 
 export function TeethCrush() {
   const [grid, setGrid] = useState<GridType[][]>(
@@ -19,8 +20,12 @@ export function TeethCrush() {
         moveSquareAction,
       }}
     >
-      <section className="w-full h-full flex flex-col justify-center items-center">
-        <Grid />
+      <section className="w-full h-full flex flex-col gap-4">
+        <Header />
+
+        <section className="w-full h-full flex flex-col justify-center items-center">
+          <Grid />
+        </section>
       </section>
     </TeethCrushContext.Provider>
   );
