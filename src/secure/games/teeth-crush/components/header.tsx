@@ -2,7 +2,11 @@ import Heart from "@/secure/components/icons/heart";
 import Timer from "@/secure/components/timer";
 import { Link } from "react-router-dom";
 
-export default function Header() {
+interface HeaderProps {
+  pausedTimer?: boolean;
+}
+
+export default function Header({ pausedTimer }: HeaderProps) {
   return (
     <section className="w-full grid grid-cols-3">
       <div className="flex flex-col">
@@ -18,7 +22,7 @@ export default function Header() {
       </div>
 
       <div className="flex justify-center">
-        <Timer duration={120} decresing />
+        <Timer paused={pausedTimer} duration={120} decresing />
       </div>
 
       <div className="flex justify-end">

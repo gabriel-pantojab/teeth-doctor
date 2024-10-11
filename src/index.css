@@ -56,6 +56,19 @@ body {
   animation: right-movement 0.5s linear;
 }
 
+.fade-out {
+  animation: fade-out 0.5s linear;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 @keyframes down-movement {
   0% {
     transform: translateY(0%);

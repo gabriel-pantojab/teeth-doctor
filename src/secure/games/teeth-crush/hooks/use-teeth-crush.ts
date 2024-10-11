@@ -16,12 +16,41 @@ import {
   oppositeDirection,
 } from "../utils/utils";
 
+import crushMp3 from "/src/assets/music/crush.mp3";
+
 interface Props {
   grid: GridType[][];
   updateGrid: React.Dispatch<React.SetStateAction<GridType[][]>>;
 }
 
+const crushAudio = new Audio(crushMp3);
+
 export function useTeethCrush({ grid, updateGrid }: Props) {
+  const crush = () => {
+    updateGrid((prev) => {
+      const updatedGrid = prev.map((row) => row.map((cell) => ({ ...cell })));
+      if (canCrushAll(prev)) {
+        crushAudio.play();
+        const [g, e] = crushAll(updatedGrid);
+        for (const position of e) {
+          updatedGrid[position.row][position.column].className = "fade-out";
+        }
+
+        setTimeout(() => {
+          const temp = fillEmptySquares(fallDownSquares(g));
+          for (const position of e) {
+            temp[position.row][position.column].className = "";
+          }
+          setTimeout(() => {
+            crush();
+          }, 300);
+          updateGrid(temp);
+        }, 500);
+      }
+      return updatedGrid;
+    });
+  };
+
   const moveSquareAction = (
     point: Point,
     startPoint: Point,
@@ -50,7 +79,7 @@ export function useTeethCrush({ grid, updateGrid }: Props) {
         direction
       )}-movement`;
 
-      updateGrid(cloneGrid); // hemos movido el cuadrado solo visualmente
+      updateGrid(cloneGrid);
 
       setTimeout(() => {
         const cloneGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
@@ -58,22 +87,8 @@ export function useTeethCrush({ grid, updateGrid }: Props) {
         cloneGrid[to.row][to.column].className = "";
         const updatedGrid = moveSquare(from, to, cloneGrid);
         updateGrid(updatedGrid);
-
         if (canCrushAll(updatedGrid)) {
-          const temp = crushAll(updatedGrid);
-          updateGrid(temp);
-          setTimeout(() => {
-            updateGrid((prev) => {
-              const temp = fallDownSquares(prev);
-              return temp;
-            });
-          }, 500);
-          setTimeout(() => {
-            updateGrid((prev) => {
-              const temp = fillEmptySquares(prev);
-              return temp;
-            });
-          }, 1000);
+          crush();
         } else {
           const temp = moveSquare(to, from, updatedGrid);
           updateGrid(temp);

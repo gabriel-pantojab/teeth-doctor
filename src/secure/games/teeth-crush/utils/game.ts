@@ -18,7 +18,7 @@ export function moveSquare(
   to: Position,
   grid: GridType[][]
 ): GridType[][] {
-  const updatedGrid = grid.map((row) => row.slice());
+  const updatedGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
   const temp = updatedGrid[from.row][from.column];
   updatedGrid[from.row][from.column] = updatedGrid[to.row][to.column];
   updatedGrid[to.row][to.column] = temp;
@@ -89,13 +89,17 @@ function horizontalCrush(
   c: number,
   grid: GridType[][],
   value: number
-) {
-  const updatedGrid = grid.map((row) => row.slice());
+): [GridType[][], Position[]] {
+  const updatedGrid: GridType[][] = grid.map((row) =>
+    row.map((cell) => ({ ...cell }))
+  );
+  const deletedElements = [{ row: r, column: c }];
   let left = c,
     right = c + 1;
 
   while (left >= 0 && updatedGrid[r][left].value === value) {
     updatedGrid[r][left].value = 0;
+    deletedElements.push({ row: r, column: left });
     left--;
   }
 
@@ -104,10 +108,11 @@ function horizontalCrush(
     updatedGrid[r][right].value === value
   ) {
     updatedGrid[r][right].value = 0;
+    deletedElements.push({ row: r, column: right });
     right++;
   }
 
-  return updatedGrid;
+  return [updatedGrid, deletedElements];
 }
 
 function verticalCrush(
@@ -115,13 +120,17 @@ function verticalCrush(
   c: number,
   grid: GridType[][],
   value: number
-) {
-  const updatedGrid = grid.map((row) => row.slice());
+): [GridType[][], Position[]] {
+  const updatedGrid: GridType[][] = grid.map((row) =>
+    row.map((cell) => ({ ...cell }))
+  );
+  const deletedElements = [{ row: r, column: c }];
   let top = r,
     bottom = r + 1;
 
   while (top >= 0 && updatedGrid[top][c].value === value) {
     updatedGrid[top][c].value = 0;
+    deletedElements.push({ row: top, column: c });
     top--;
   }
 
@@ -130,21 +139,25 @@ function verticalCrush(
     updatedGrid[bottom][c].value === value
   ) {
     updatedGrid[bottom][c].value = 0;
+    deletedElements.push({ row: bottom, column: c });
     bottom++;
   }
 
-  return updatedGrid;
+  return [updatedGrid, deletedElements];
 }
 
-export function crush(position: Position, grid: GridType[][]): GridType[][] {
-  const cloneGrid = grid.map((row) => row.slice());
+export function crush(
+  position: Position,
+  grid: GridType[][]
+): [GridType[][], Position[]] {
+  const cloneGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
   const value = cloneGrid[position.row][position.column].value;
 
   const r = position.row;
   const c = position.column;
 
   //todo: primero verificar L / T
-  let updatedGrid;
+  let updatedGrid: GridType[][] | null = null;
   const canCrushHorizontal =
     countMatch(position, 0, 1, cloneGrid) +
       countMatch(position, 0, -1, cloneGrid) -
@@ -156,27 +169,36 @@ export function crush(position: Position, grid: GridType[][]): GridType[][] {
       1 >=
     COUNT_TO_CRUSH;
 
+  const deletedElements = [];
+
   if (canCrushHorizontal) {
-    updatedGrid = horizontalCrush(r, c, cloneGrid, value);
+    const [g, e] = horizontalCrush(r, c, cloneGrid, value);
+    updatedGrid = g;
+    deletedElements.push(...e);
   } else if (canCrushVertical) {
-    updatedGrid = verticalCrush(r, c, cloneGrid, value);
+    const [g, e] = verticalCrush(r, c, cloneGrid, value);
+    updatedGrid = g;
+    deletedElements.push(...e);
   }
 
-  return updatedGrid || cloneGrid;
+  return [updatedGrid || grid, deletedElements];
 }
 
-export function crushAll(grid: GridType[][]): GridType[][] {
-  let updatedGrid = grid.map((row) => row.slice());
+export function crushAll(grid: GridType[][]): [GridType[][], Position[]] {
+  let updatedGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
+  const deletedElements = [];
 
   for (let i = 0; i < updatedGrid.length; i++) {
     for (let j = 0; j < updatedGrid[0].length; j++) {
       if (canCrush({ row: i, column: j }, updatedGrid)) {
-        updatedGrid = crush({ row: i, column: j }, updatedGrid);
+        const [g, e] = crush({ row: i, column: j }, updatedGrid);
+        updatedGrid = g;
+        deletedElements.push(...e);
       }
     }
   }
 
-  return updatedGrid;
+  return [updatedGrid, deletedElements];
 }
 
 export function fallDownSquares(grid: GridType[][]) {

@@ -16,7 +16,6 @@ export function Square({ position, className, value }: SquareProps) {
   const [isMoving, setIsMoving] = useState(false);
 
   const handleTouchStart = (e: TouchEvent) => {
-    e.preventDefault();
     const touch = e.touches[0];
     const { clientX, clientY } = touch;
 
@@ -25,8 +24,6 @@ export function Square({ position, className, value }: SquareProps) {
   };
 
   const handleTouchMove = (e: TouchEvent) => {
-    e.preventDefault();
-
     if (!isMoving) return;
 
     const touch = e.touches[0];

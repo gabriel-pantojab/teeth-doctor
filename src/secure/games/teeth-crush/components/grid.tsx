@@ -28,7 +28,7 @@ export function Grid() {
               value={grid[rowIndex][columnIndex].value}
             />
           ) : (
-            <div></div>
+            <div key={`${rowIndex}-${columnIndex}`}></div>
           )
         )
       )}

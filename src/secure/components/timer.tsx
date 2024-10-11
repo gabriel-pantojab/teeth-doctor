@@ -5,13 +5,22 @@ interface TimerProps {
   duration: number;
   decresing?: boolean;
   endTime?: () => void;
+  paused?: boolean;
 }
 
-export default function Timer({ duration, decresing = false }: TimerProps) {
+export default function Timer({
+  duration,
+  decresing = false,
+  paused = false,
+}: TimerProps) {
   const [time, setTime] = useState<number>(decresing ? duration : 0);
 
   useEffect(() => {
     const interval = setInterval(() => {
+      if (paused) {
+        clearInterval(interval);
+        return;
+      }
       setTime((prevTime) => {
         const isFished = decresing ? prevTime === 0 : prevTime === duration;
         if (isFished) {
@@ -23,7 +32,7 @@ export default function Timer({ duration, decresing = false }: TimerProps) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [duration, decresing]);
+  }, [duration, decresing, paused]);
 
   useEffect(() => {}, [time]);
 
