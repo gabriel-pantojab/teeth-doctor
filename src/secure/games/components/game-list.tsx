@@ -14,9 +14,12 @@ export function GameList() {
         <span className="font-bold">x{lives}</span>
       </div>
 
-      <GameCard title="Trivia" banner={"/src/assets/trivia.webp"} />
+      <GameCard title="Trivia" banner={"/assets/images/trivia.webp"} />
 
-      <GameCard title="Teeth Crush" banner={"/src/assets/teeth-crush.webp"} />
+      <GameCard
+        title="Teeth Crush"
+        banner={"/assets/images/teeth-crush.webp"}
+      />
     </section>
   );
 }

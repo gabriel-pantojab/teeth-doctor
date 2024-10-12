@@ -7,7 +7,7 @@ import Question from "@/secure/games/trivia/components/question";
 import { SECONDS_TO_ANSWER } from "@/secure/games/trivia/models/constants";
 import Play from "@/secure/components/icons/play";
 
-const triviaMusic = new Audio("/src/assets/music/trivia.mp3");
+const triviaMusic = new Audio("/assets/sounds/trivia.mp3");
 
 export default function TriviaGame() {
   const {

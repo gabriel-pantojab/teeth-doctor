@@ -12,7 +12,7 @@ import { useTeethCrush } from "./hooks/use-teeth-crush";
 import { GRID_COLUMNS, GRID_ROWS } from "./models/constants";
 import { generateGrid } from "./utils/utils";
 
-import music from "@/assets/music/music.mp3";
+import music from "/assets/sounds/music.mp3";
 
 function TeethCrushProvider({ children }: { children: React.ReactNode }) {
   const [grid, setGrid] = useState<GridType[][]>(

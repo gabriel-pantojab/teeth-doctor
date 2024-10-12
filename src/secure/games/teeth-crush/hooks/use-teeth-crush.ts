@@ -16,7 +16,7 @@ import {
   oppositeDirection,
 } from "../utils/utils";
 
-import crushMp3 from "/src/assets/music/crush.mp3";
+import crushMp3 from "/assets/sounds/crush.mp3";
 
 interface Props {
   grid: GridType[][];
