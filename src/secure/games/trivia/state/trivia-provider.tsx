@@ -1,15 +1,13 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { TriviaContext } from "./trivia-context";
+import { AppContext } from "@/secure/state/app-context";
 
 import { QuestionModel } from "../models/question";
 import { endTriviaPopup, showPopupMessage } from "../utils/popup-message";
-import { AppContext } from "@/secure/state/app-context";
 import { MAXIMUN_CORRECT_ANSWERS } from "../models/constants";
 
 export function TriviaProvider({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate();
   const { updateLives } = useContext(AppContext);
   const [questions, setQuestions] = useState<QuestionModel[]>([
     {
@@ -33,8 +31,9 @@ export function TriviaProvider({ children }: { children: React.ReactNode }) {
   ]);
   const [currentQuestionIndex, setCurrentQuestion] = useState<number>(0);
   const [correctQuestions, setCorrectQuestions] = useState<number>(0);
-  const [startTime, setStartTime] = useState<boolean>(true);
+  const [startTime, setStartTime] = useState<boolean>(false);
   const [timeLimit, setTimeLimit] = useState<boolean>(false);
+  const [run, setRun] = useState<boolean>(false);
 
   useEffect(() => {
     if (timeLimit) {
@@ -53,13 +52,24 @@ export function TriviaProvider({ children }: { children: React.ReactNode }) {
               updateLives((prev) => prev + 1);
             }
 
-            endTriviaPopup(correctQuestions).then(() => navigate("/games"));
+            endTriviaPopup(correctQuestions).then(() => resetTrivia());
           }
         }
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLimit]);
+
+  const resetTrivia = () => {
+    setQuestions((prev) =>
+      prev.map((question) => ({ ...question, answered: false }))
+    );
+    setCurrentQuestion(0);
+    setCorrectQuestions(0);
+    setStartTime(false);
+    setTimeLimit(false);
+    setRun(false);
+  };
 
   const nextQuestion = useCallback(() => {
     if (currentQuestionIndex < questions.length - 1) {
@@ -96,7 +106,7 @@ export function TriviaProvider({ children }: { children: React.ReactNode }) {
               if (prev + 1 > MAXIMUN_CORRECT_ANSWERS) {
                 updateLives((prev) => prev + 1);
               }
-              endTriviaPopup(prev + 1).then(() => navigate("/games"));
+              endTriviaPopup(prev + 1).then(() => resetTrivia());
             }
           }
         });
@@ -118,7 +128,7 @@ export function TriviaProvider({ children }: { children: React.ReactNode }) {
               if (correctQuestions > MAXIMUN_CORRECT_ANSWERS) {
                 updateLives((prev) => prev + 1);
               }
-              endTriviaPopup(correctQuestions).then(() => navigate("/games"));
+              endTriviaPopup(correctQuestions).then(() => resetTrivia());
             }
           }
         });
@@ -136,6 +146,8 @@ export function TriviaProvider({ children }: { children: React.ReactNode }) {
         correctQuestions,
         startTime,
         timeLimit,
+        run,
+        setRun,
         setTimeLimit,
         setQuestions,
         updateCorrectQuestions: setCorrectQuestions,

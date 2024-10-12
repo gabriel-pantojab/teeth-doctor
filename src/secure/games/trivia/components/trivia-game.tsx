@@ -5,21 +5,32 @@ import { TriviaContext } from "../state/trivia-context";
 import Question from "./question";
 
 import { SECONDS_TO_ANSWER } from "../models/constants";
+import Play from "@/secure/components/icons/play";
 
 const triviaMusic = new Audio("/src/assets/music/trivia.mp3");
 
 export default function TriviaGame() {
-  const { questions, currentQuestionIndex, correctQuestions, startTime } =
-    useContext(TriviaContext);
+  const {
+    questions,
+    currentQuestionIndex,
+    correctQuestions,
+    startTime,
+    run,
+    setRun,
+  } = useContext(TriviaContext);
 
   useEffect(() => {
-    triviaMusic.play();
-    triviaMusic.loop = true;
     return () => {
       triviaMusic.pause();
       triviaMusic.currentTime = 0;
     };
   }, []);
+
+  const handleRun = () => {
+    triviaMusic.play();
+    triviaMusic.loop = true;
+    setRun(true);
+  };
 
   return (
     <section className="flex flex-col gap-2 w-full">
@@ -47,6 +58,21 @@ export default function TriviaGame() {
       <section className="flex justify-center">{`${
         currentQuestionIndex + 1
       } / ${questions.length}`}</section>
+
+      {!run && (
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="flex flex-col justify-center items-center bg-white p-2 rounded-md">
+            <button
+              className="bg-blue-500 text-white border-2 border-white rounded-full p-4"
+              onClick={handleRun}
+            >
+              <Play color="white" height={50} width={50} />
+            </button>
+
+            <Link to="/games">Volver</Link>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

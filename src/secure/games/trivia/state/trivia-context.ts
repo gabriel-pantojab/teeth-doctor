@@ -7,6 +7,8 @@ export interface TriviaContextType {
   correctQuestions: number;
   startTime: boolean;
   timeLimit: boolean;
+  run: boolean;
+  setRun: React.Dispatch<React.SetStateAction<boolean>>;
   setTimeLimit: React.Dispatch<React.SetStateAction<boolean>>;
   setStartTime: React.Dispatch<React.SetStateAction<boolean>>;
   setQuestions: React.Dispatch<React.SetStateAction<QuestionModel[]>>;
@@ -21,6 +23,8 @@ export const TriviaContext = createContext<TriviaContextType>({
   correctQuestions: 0,
   startTime: false,
   timeLimit: false,
+  run: false,
+  setRun: () => {},
   setTimeLimit: () => {},
   setStartTime: () => {},
   setQuestions: () => {},

@@ -10,7 +10,7 @@ interface QuestionProps {
 }
 
 export default function Question({ question, answers }: QuestionProps) {
-  const { handleAnswer, setStartTime, setTimeLimit } =
+  const { handleAnswer, setStartTime, setTimeLimit, run } =
     useContext(TriviaContext);
   const [randomColors, setRandomColors] = useState<string[]>(
     getRandomColors(answers.length)
@@ -18,6 +18,7 @@ export default function Question({ question, answers }: QuestionProps) {
   const [timOutID, setTimeoutID] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    if (!run) return;
     setStartTime(true);
     setTimeLimit(false);
 
@@ -30,7 +31,7 @@ export default function Question({ question, answers }: QuestionProps) {
 
     return () => clearTimeout(ID);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [question]);
+  }, [question, run]);
 
   useEffect(() => {
     setRandomColors(getRandomColors(answers.length));
