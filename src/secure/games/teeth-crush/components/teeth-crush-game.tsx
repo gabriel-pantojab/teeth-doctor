@@ -26,6 +26,7 @@ export default function TeethCrushGame() {
     updateLevel,
     updateGrid,
     updateTimerDuration,
+    grid,
   } = useContext(TeethCrushContext);
   const { lives, updateLives } = useContext(AppContext);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -51,9 +52,18 @@ export default function TeethCrushGame() {
 
   useEffect(() => {
     if (score >= level * GROW_FACTOR_LEVEL) {
+      const temp = grid.map((row) => row.map((square) => ({ ...square })));
+      temp.forEach((row) => {
+        row.forEach((square) => {
+          square.className = "fade-out";
+        });
+      });
+      updateGrid(temp);
       updateLevel(level + 1);
       updateTimerDuration(timerDuration - GROW_FACTOR_TIME);
-      updateGrid(generateGrid(GRID_ROWS, GRID_COLUMNS));
+      setTimeout(() => {
+        updateGrid(generateGrid(GRID_ROWS, GRID_COLUMNS));
+      }, 500);
       updateScore(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
