@@ -30,6 +30,13 @@ export default function TeethCrushGame() {
   const { lives, updateLives } = useContext(AppContext);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  useEffect(() => {
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, []);
+
   const endTimeAction = () => {
     setIsPlaying(false);
     audio.pause();

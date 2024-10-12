@@ -7,7 +7,7 @@ export function GameList() {
   const { lives } = useContext(AppContext);
 
   return (
-    <section className="flex w-full h-full flex-col gap-2 items-center">
+    <section className="flex w-full h-full flex-col gap-4 items-center">
       <div className="w-full flex items-center gap-1">
         <Heart width={20} height={20} color="red" />
 
