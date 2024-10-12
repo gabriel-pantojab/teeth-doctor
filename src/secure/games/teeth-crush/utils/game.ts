@@ -198,7 +198,22 @@ export function crushAll(grid: GridType[][]): [GridType[][], Position[]] {
     }
   }
 
-  return [updatedGrid, deletedElements];
+  return [updatedGrid, getUniques(deletedElements)];
+}
+
+function getUniques(arr: Position[]) {
+  const ans = [arr[0]];
+  for (let i = 1; i < arr.length; i++) {
+    let exist = false;
+    for (let j = 0; j < ans.length; j++) {
+      if (ans[j].row === arr[i].row && ans[j].column === arr[i].column) {
+        exist = true;
+        break;
+      }
+    }
+    if (!exist) ans.push(arr[i]);
+  }
+  return ans;
 }
 
 export function fallDownSquares(grid: GridType[][]) {
@@ -234,4 +249,37 @@ export function fillEmptySquares(grid: GridType[][]) {
   }
 
   return updatedGrid;
+}
+export function checkCanMove(grid: GridType[][]): boolean {
+  const cloneGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
+  if (canCrushAll(cloneGrid)) {
+    return true;
+  }
+
+  const directions = [
+    { x: 0, y: 1 },
+    { x: 0, y: -1 },
+    { x: 1, y: 0 },
+    { x: -1, y: 0 },
+  ];
+
+  for (let i = 0; i < cloneGrid.length; i++) {
+    for (let j = 0; j < cloneGrid[0].length; j++) {
+      for (const direction of directions) {
+        const to = {
+          row: i + direction.y,
+          column: j + direction.x,
+        };
+
+        if (isValidMove(to, cloneGrid)) {
+          const temp = moveSquare({ row: i, column: j }, to, cloneGrid);
+          if (canCrushAll(temp)) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+
+  return false;
 }

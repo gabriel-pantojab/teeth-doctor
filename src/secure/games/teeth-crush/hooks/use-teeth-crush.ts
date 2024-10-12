@@ -17,27 +17,35 @@ import {
 } from "../utils/utils";
 
 import crushMp3 from "/assets/sounds/crush.mp3";
+import { POINTS_PER_SQUARE } from "../models/constants";
 
 interface Props {
   grid: GridType[][];
   updateGrid: React.Dispatch<React.SetStateAction<GridType[][]>>;
+  updateScore: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const crushAudio = new Audio(crushMp3);
 
-export function useTeethCrush({ grid, updateGrid }: Props) {
+export function useTeethCrush({ grid, updateGrid, updateScore }: Props) {
   const crush = () => {
     updateGrid((prev) => {
       const updatedGrid = prev.map((row) => row.map((cell) => ({ ...cell })));
       if (canCrushAll(prev)) {
         crushAudio.play();
         const [g, e] = crushAll(updatedGrid);
+
+        updateScore((prev) => {
+          return prev + e.length * POINTS_PER_SQUARE;
+        });
+
         for (const position of e) {
           updatedGrid[position.row][position.column].className = "fade-out";
         }
 
         setTimeout(() => {
-          const temp = fillEmptySquares(fallDownSquares(g));
+          const temp1 = fallDownSquares(g);
+          const temp = fillEmptySquares(temp1);
           for (const position of e) {
             temp[position.row][position.column].className = "";
           }

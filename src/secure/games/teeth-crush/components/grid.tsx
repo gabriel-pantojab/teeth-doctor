@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Square } from "./square";
-import { TeethCrushContext } from "../state/teeth-crush-context";
+import { TeethCrushContext } from "../state/teeth-crush-provider";
 
 export function Grid() {
   const { grid } = useContext(TeethCrushContext);

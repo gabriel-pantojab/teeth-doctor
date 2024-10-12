@@ -1,4 +1,3 @@
-import { createContext } from "react";
 import { Point } from "../models/point";
 import { Position } from "../utils/game";
 
@@ -16,17 +15,7 @@ export interface TeethCrushContextType {
     startPosition: Position
   ) => void;
   score: number;
-  updateScore?: React.Dispatch<React.SetStateAction<number>>;
+  updateScore: React.Dispatch<React.SetStateAction<number>>;
   timerDuration?: number;
   updateTimerDuration?: React.Dispatch<React.SetStateAction<number>>;
 }
-
-export const TeethCrushContext = createContext<TeethCrushContextType>({
-  grid: [],
-  updateGrid: () => {},
-  moveSquareAction: () => {},
-  score: 0,
-  updateScore: () => {},
-  timerDuration: 0,
-  updateTimerDuration: () => {},
-});
