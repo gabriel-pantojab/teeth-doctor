@@ -1,10 +1,10 @@
 import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { TriviaContext } from "../state/trivia-context";
-import Question from "./question";
+import { TriviaContext } from "@/secure/games/trivia/state/trivia-context";
+import Question from "@/secure/games/trivia/components/question";
 
-import { SECONDS_TO_ANSWER } from "../models/constants";
+import { SECONDS_TO_ANSWER } from "@/secure/games/trivia/models/constants";
 import Play from "@/secure/components/icons/play";
 
 const triviaMusic = new Audio("/src/assets/music/trivia.mp3");
@@ -33,7 +33,7 @@ export default function TriviaGame() {
   };
 
   return (
-    <section className="flex flex-col gap-2 w-full">
+    <section className="flex flex-col gap-2 w-full h-full">
       <section className="flex justify-between">
         <h2>
           <span>Correctas: {correctQuestions}</span>

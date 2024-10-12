@@ -46,8 +46,15 @@ export default function Question({ question, answers }: QuestionProps) {
 
   return (
     <article className="shadow-lg flex flex-col gap-2 bg-white rounded-md p-4  items-center justify-center">
-      <section>
-        <h2 className="text-2xl text-center">{question}</h2>
+      <section className="w-full">
+        <h2
+          style={{
+            backgroundColor: run ? "transparent" : "#f5f5f5",
+          }}
+          className="text-2xl text-center min-h-[30px] w-full"
+        >
+          {run ? question : ""}
+        </h2>
       </section>
 
       <section className="flex flex-col gap-2 w-full">
@@ -59,7 +66,7 @@ export default function Question({ question, answers }: QuestionProps) {
             style={{ backgroundColor: randomColors[index] }}
             className={`p-2 text-xl font-bold text-white rounded-md w-full min-h-[70px]`}
           >
-            {answer}
+            {run && answer}
           </button>
         ))}
       </section>

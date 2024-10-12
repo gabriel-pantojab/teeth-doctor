@@ -1,3 +1,5 @@
+import { QuestionModel } from "../models/question";
+
 export const colors = [
   "#7EDCF5",
   "#F58567",
@@ -17,4 +19,16 @@ export function getRandomColors(count: number) {
     randomColors.push(randomColor);
   }
   return randomColors;
+}
+
+export function getRandomQuestions(questions: QuestionModel[], count: number) {
+  const randomQuestions: QuestionModel[] = [];
+  for (let i = 0; i < count; i++) {
+    let randomQuestion;
+    do {
+      randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+    } while (randomQuestions.includes(randomQuestion));
+    randomQuestions.push(randomQuestion);
+  }
+  return randomQuestions;
 }

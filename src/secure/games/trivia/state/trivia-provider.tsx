@@ -1,34 +1,25 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 
-import { TriviaContext } from "./trivia-context";
+import { TriviaContext } from "@/secure/games/trivia/state/trivia-context";
 import { AppContext } from "@/secure/state/app-context";
 
-import { QuestionModel } from "../models/question";
-import { endTriviaPopup, showPopupMessage } from "../utils/popup-message";
-import { MAXIMUN_CORRECT_ANSWERS } from "../models/constants";
+import { QuestionModel } from "@/secure/games/trivia/models/question";
+import {
+  endTriviaPopup,
+  showPopupMessage,
+} from "@/secure/games/trivia/utils/popup-message";
+import {
+  COUNT_QUESTIONS,
+  MAXIMUN_CORRECT_ANSWERS,
+} from "@/secure/games/trivia/models/constants";
+import { getRandomQuestions } from "@/secure/games/trivia/utils/utils";
+import { QUESTIONS } from "@/secure/games/trivia/db/db";
 
 export function TriviaProvider({ children }: { children: React.ReactNode }) {
   const { updateLives } = useContext(AppContext);
-  const [questions, setQuestions] = useState<QuestionModel[]>([
-    {
-      question: "¿Cuál es la capital de Francia?",
-      answers: ["Madrid", "Paris", "Londres", "Roma"],
-      indexCorrectAnswer: 1,
-      answered: false,
-    },
-    {
-      question: "¿Cuál es la capital de España?",
-      answers: ["Madrid", "Paris", "Londres", "Roma"],
-      indexCorrectAnswer: 0,
-      answered: false,
-    },
-    {
-      question: "¿Cuál es la capital de Italia?",
-      answers: ["Madrid", "Paris", "Londres", "Roma"],
-      indexCorrectAnswer: 3,
-      answered: false,
-    },
-  ]);
+  const [questions, setQuestions] = useState<QuestionModel[]>(
+    getRandomQuestions(QUESTIONS, COUNT_QUESTIONS)
+  );
   const [currentQuestionIndex, setCurrentQuestion] = useState<number>(0);
   const [correctQuestions, setCorrectQuestions] = useState<number>(0);
   const [startTime, setStartTime] = useState<boolean>(false);
@@ -61,9 +52,7 @@ export function TriviaProvider({ children }: { children: React.ReactNode }) {
   }, [timeLimit]);
 
   const resetTrivia = () => {
-    setQuestions((prev) =>
-      prev.map((question) => ({ ...question, answered: false }))
-    );
+    setQuestions(getRandomQuestions(QUESTIONS, COUNT_QUESTIONS));
     setCurrentQuestion(0);
     setCorrectQuestions(0);
     setStartTime(false);
