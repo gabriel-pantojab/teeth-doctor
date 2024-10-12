@@ -94,7 +94,7 @@ function horizontalCrush(
     row.map((cell) => ({ ...cell }))
   );
   const deletedElements = [{ row: r, column: c }];
-  let left = c,
+  let left = c - 1,
     right = c + 1;
 
   while (left >= 0 && updatedGrid[r][left].value === value) {
@@ -125,7 +125,7 @@ function verticalCrush(
     row.map((cell) => ({ ...cell }))
   );
   const deletedElements = [{ row: r, column: c }];
-  let top = r,
+  let top = r - 1,
     bottom = r + 1;
 
   while (top >= 0 && updatedGrid[top][c].value === value) {

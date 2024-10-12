@@ -1,9 +1,11 @@
 export const WIDTH = 55;
 export const HEIGHT = 55;
-export const GRID_ROWS = 5;
+export const GRID_ROWS = 7;
 export const GRID_COLUMNS = 5;
 export const COUNT_TO_CRUSH = 3;
 export const POINTS_PER_SQUARE = 100;
+export const GROW_FACTOR_TIME = 45;
+export const GROW_FACTOR_LEVEL = 5300;
 
 export const images: string[] = [
   "/assets/images/diente.webp",

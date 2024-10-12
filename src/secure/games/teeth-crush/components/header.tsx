@@ -6,15 +6,17 @@ interface HeaderProps {
   pausedTimer?: boolean;
   lives: number;
   score: number;
+  goalScore: number;
   endTimeAction?: () => void;
-  timerDuration?: number;
+  timerDuration: number;
 }
 
 export default function Header({
   pausedTimer,
   lives,
   score,
-  timerDuration = 120,
+  timerDuration,
+  goalScore,
   endTimeAction,
 }: HeaderProps) {
   return (
@@ -22,6 +24,10 @@ export default function Header({
       <div className="flex flex-col">
         <h2>
           <span className="font-bold">Puntos: </span> {score}
+        </h2>
+
+        <h2>
+          <span className="font-bold">Objetivo: </span> {goalScore}
         </h2>
 
         <h2 className="flex gap-2 items-center">

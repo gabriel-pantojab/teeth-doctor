@@ -14,6 +14,8 @@ export const TeethCrushContext = createContext<TeethCrushContextType>({
   updateScore: () => {},
   timerDuration: 0,
   updateTimerDuration: () => {},
+  level: 0,
+  updateLevel: () => {},
 });
 
 export function TeethCrushProvider({
@@ -25,7 +27,8 @@ export function TeethCrushProvider({
     generateGrid(GRID_ROWS, GRID_COLUMNS)
   );
   const [score, setScore] = useState<number>(0);
-  const [timerDuration, setTimerDuration] = useState<number>(120);
+  const [timerDuration, setTimerDuration] = useState<number>(180);
+  const [level, setLevel] = useState<number>(1);
   const { moveSquareAction } = useTeethCrush({
     grid,
     updateGrid: setGrid,
@@ -48,6 +51,8 @@ export function TeethCrushProvider({
         updateScore: setScore,
         timerDuration,
         updateTimerDuration: setTimerDuration,
+        level,
+        updateLevel: setLevel,
       }}
     >
       {children}

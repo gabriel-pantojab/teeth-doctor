@@ -15,6 +15,17 @@ export default function Timer({
   endTime,
 }: TimerProps) {
   const [time, setTime] = useState<number>(decresing ? duration : 0);
+  const [end, setEnd] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!paused) {
+      setEnd(false);
+    }
+  }, [paused]);
+
+  useEffect(() => {
+    setTime(decresing ? duration : 0);
+  }, [end, duration, decresing]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,6 +36,7 @@ export default function Timer({
       setTime((prevTime) => {
         const isFished = decresing ? prevTime === 0 : prevTime === duration;
         if (isFished) {
+          setEnd(true);
           if (endTime) {
             setTimeout(() => {
               endTime();
@@ -38,9 +50,8 @@ export default function Timer({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [duration, decresing, paused, endTime]);
-
-  useEffect(() => {}, [time]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused, duration]);
 
   return <div>{secondsToFomattedTime(time)}</div>;
 }

@@ -40,10 +40,10 @@ export function Square({ position, className, value }: SquareProps) {
 
   const handleTouchMove = (e: TouchEvent) => {
     if (!isMoving) return;
+    setIsMoving(false);
 
     const touch = e.touches[0];
     const { clientX: x, clientY: y } = touch;
-    setIsMoving(false);
 
     moveSquareAction({ x, y }, { x: startPoint.x, y: startPoint.y }, position);
   };

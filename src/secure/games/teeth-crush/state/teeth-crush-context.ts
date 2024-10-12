@@ -16,6 +16,8 @@ export interface TeethCrushContextType {
   ) => void;
   score: number;
   updateScore: React.Dispatch<React.SetStateAction<number>>;
-  timerDuration?: number;
-  updateTimerDuration?: React.Dispatch<React.SetStateAction<number>>;
+  timerDuration: number;
+  updateTimerDuration: React.Dispatch<React.SetStateAction<number>>;
+  level: number;
+  updateLevel: React.Dispatch<React.SetStateAction<number>>;
 }
