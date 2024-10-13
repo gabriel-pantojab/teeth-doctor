@@ -14,6 +14,7 @@ import {
   GROW_FACTOR_LEVEL,
   GROW_FACTOR_TIME,
 } from "../models/constants";
+import { updateLivesStorage } from "@/storage/storage";
 
 const audio = new Audio(music);
 
@@ -43,7 +44,10 @@ export default function TeethCrushGame() {
     audio.pause();
     audio.currentTime = 0;
     if (score < level * GROW_FACTOR_LEVEL && lives > 0) {
-      updateLives(lives - 1);
+      updateLives((prev) => {
+        updateLivesStorage(prev - 1);
+        return prev - 1;
+      });
     }
     updateScore(0);
     updateLevel(1);

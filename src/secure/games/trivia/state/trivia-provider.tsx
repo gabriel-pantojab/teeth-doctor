@@ -14,6 +14,7 @@ import {
 } from "@/secure/games/trivia/models/constants";
 import { getRandomQuestions } from "@/secure/games/trivia/utils/utils";
 import { QUESTIONS } from "@/secure/games/trivia/db/db";
+import { updateLivesStorage } from "@/storage/storage";
 
 export function TriviaProvider({ children }: { children: React.ReactNode }) {
   const { updateLives } = useContext(AppContext);
@@ -115,7 +116,10 @@ export function TriviaProvider({ children }: { children: React.ReactNode }) {
           if (result.isConfirmed) {
             if (!nextQuestion()) {
               if (correctQuestions > MAXIMUN_CORRECT_ANSWERS) {
-                updateLives((prev) => prev + 1);
+                updateLives((prev) => {
+                  updateLivesStorage(prev + 1);
+                  return prev + 1;
+                });
               }
               endTriviaPopup(correctQuestions).then(() => resetTrivia());
             }
