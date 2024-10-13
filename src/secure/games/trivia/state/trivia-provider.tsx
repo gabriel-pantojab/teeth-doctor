@@ -61,6 +61,16 @@ export function TriviaProvider({ children }: { children: React.ReactNode }) {
     setRun(false);
   };
 
+  const endTrivia = (correctQuestionNumber: number) => {
+    if (correctQuestionNumber > MAXIMUN_CORRECT_ANSWERS) {
+      updateLives((prev) => {
+        updateLivesStorage(prev + 1);
+        return prev + 1;
+      });
+    }
+    endTriviaPopup(correctQuestions).then(() => resetTrivia());
+  };
+
   const nextQuestion = useCallback(() => {
     if (currentQuestionIndex < questions.length - 1) {
       setQuestions((prev) =>
@@ -93,10 +103,7 @@ export function TriviaProvider({ children }: { children: React.ReactNode }) {
         }).then((result) => {
           if (result.isConfirmed) {
             if (!nextQuestion()) {
-              if (prev + 1 > MAXIMUN_CORRECT_ANSWERS) {
-                updateLives((prev) => prev + 1);
-              }
-              endTriviaPopup(prev + 1).then(() => resetTrivia());
+              endTrivia(prev);
             }
           }
         });
@@ -115,13 +122,7 @@ export function TriviaProvider({ children }: { children: React.ReactNode }) {
         }).then((result) => {
           if (result.isConfirmed) {
             if (!nextQuestion()) {
-              if (correctQuestions > MAXIMUN_CORRECT_ANSWERS) {
-                updateLives((prev) => {
-                  updateLivesStorage(prev + 1);
-                  return prev + 1;
-                });
-              }
-              endTriviaPopup(correctQuestions).then(() => resetTrivia());
+              endTrivia(correctQuestions);
             }
           }
         });
