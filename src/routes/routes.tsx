@@ -5,6 +5,7 @@ import { GamePage } from "@secure/games/game-page";
 import { GameList } from "@/secure/games/components/game-list";
 import { TeethCrush } from "@/secure/games/teeth-crush/teeth-crush";
 import Trivia from "@/secure/games/trivia/trivia";
+import About from "@/secure/about/about";
 
 export const router = createHashRouter([
   {
@@ -36,6 +37,10 @@ export const router = createHashRouter([
             element: <Trivia />,
           },
         ],
+      },
+      {
+        path: "/about",
+        element: <About />,
       },
     ],
   },
